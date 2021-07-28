@@ -1,0 +1,575 @@
+openapi: 3.0.0
+info:
+  title: editorial tools api
+  version: '1.0'
+  contact:
+    name: Daichi Kudo
+    email: daichi.kudo@hearst.co.jp
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  /instagram/tags:
+    parameters: []
+    get:
+      summary: Get Instagram Tags by Time
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InstagramPost'
+              examples:
+                example:
+                  value:
+                    - post_id: 0
+                      instagramer_id:
+                        instagramer_id: 0
+                        name: string
+                      content: string
+                      posted_at: '2019-08-24T14:15:22Z'
+                      created_at: '2019-08-24T14:15:22Z'
+        '404':
+          description: User Not Found
+      operationId: get-instagram-tags
+      description: ''
+  /instagram/tags-from-origin:
+    get:
+      summary: Get Instagram Tags from Instagram by Time
+      tags: []
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+      operationId: get-instagram-tags-from-origin
+  '/twitter/popular-contents/{search}':
+    get:
+      summary: Get Twitter Contents by Search Words
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    text:
+                      type: string
+                    url:
+                      type: string
+                    hashtags:
+                      type: array
+                      items:
+                        type: string
+                    retweet_count:
+                      type: integer
+                    favorite_count:
+                      type: integer
+                    created_at:
+                      type: string
+                      format: date-time
+              examples:
+                example-1:
+                  value:
+                    - name: string
+                      text: string
+                      url: string
+                      hashtags:
+                        - string
+                      retweet_count: 0
+                      favorite_count: 0
+                      created_at: '2019-08-24T14:15:22Z'
+        '400':
+          description: Bad Request
+      operationId: get-twitter-popular
+      description: |-
+        see the below for description.
+        https://developer.twitter.com/en/docs/twitter-api/v1/tweets/search/api-reference/get-search-tweets
+    parameters:
+      - schema:
+          type: string
+        name: search
+        in: path
+        required: true
+        description: search words
+  '/yahoo/competitor-contents/{search}':
+    get:
+      summary: Get Competitor Contents in Yahoo by Search Words
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/YahooArticle'
+              examples:
+                example-1:
+                  value:
+                    - article_id: 0
+                      publisher_id:
+                        publisher_id: 0
+                        name: string
+                        url: string
+                      title: string
+                      content: string
+                      published_at: '2019-08-24T14:15:22Z'
+                      created_at: '2019-08-24T14:15:22Z'
+        '400':
+          description: Bad Request
+      operationId: get-yahoo-contents
+    parameters:
+      - schema:
+          type: string
+        name: search
+        in: path
+        required: true
+        description: search words
+  '/yahoo/own-contents/{search}':
+    get:
+      summary: Get Own Contents in Yahoo by Search Words
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HearstYahooArticle'
+              examples:
+                example-1:
+                  value:
+                    - article_id: 0
+                      media_id:
+                        media_id: 0
+                        name: string
+                      title: string
+                      content: string
+                      pv: 0
+                      ctr: 0
+                      published_at: '2019-08-24T14:15:22Z'
+                      created_at: '2019-08-24T14:15:22Z'
+        '400':
+          description: Bad Request
+      operationId: get-yahoo-own-contents
+    parameters:
+      - schema:
+          type: string
+        name: search
+        in: path
+        required: true
+        description: search words
+  /yahoo/competitor-contents-from-origin:
+    get:
+      summary: Get Competitor Contents from Yahoo by Time
+      tags: []
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+      operationId: get-yahoo-competitor-contents-from-origin
+  '/google/suggested-words/{search}':
+    get:
+      summary: Get Suggested Word Volume
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    word:
+                      type: string
+                    volume:
+                      type: string
+        '400':
+          description: Bad Request
+      operationId: get-google-suggested-words
+    parameters:
+      - schema:
+          type: string
+        name: search
+        in: path
+        required: true
+        description: search words
+  '/google/competitor-contents/{search}':
+    get:
+      summary: Get Competitor Contents in Google by Search Words
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  title:
+                    type: string
+                  url:
+                    type: string
+                  media:
+                    type: string
+                  description:
+                    type: string
+        '400':
+          description: Bad Request
+      operationId: get-google-competitor-contents
+    parameters:
+      - schema:
+          type: string
+        name: search
+        in: path
+        required: true
+        description: search words
+  '/mos/contents/{search}':
+    get:
+      summary: Get Contents in MOS by Search Words
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HearstArticle'
+              examples:
+                example-1:
+                  value:
+                    - media_id:
+                        media_id: 0
+                        name: string
+                      article_id: 0
+                      title: string
+                      content: string
+                      pv: 0
+                      ctr: 0
+                      published_at: '2019-08-24T14:15:22Z'
+                      created_at: '2019-08-24T14:15:22Z'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      operationId: get-mos-contents
+    parameters:
+      - schema:
+          type: string
+        name: search
+        in: path
+        required: true
+        description: search words
+  '/mos/similar-contents/{search}':
+    get:
+      summary: Get Similar Contents in MOS by Search Words
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HearstArticle'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      operationId: get-mos-search-contents
+    parameters:
+      - schema:
+          type: string
+        name: search
+        in: path
+        required: true
+        description: search words
+  /mos/hot-words:
+    get:
+      summary: Get Hot Word by Time
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+              examples:
+                example-1:
+                  value:
+                    - string
+        '400':
+          description: Bad Request
+      operationId: get-mos-hot-word
+    parameters: []
+  '/search/histories/{search}':
+    get:
+      summary: Get Search Histories by Time
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  twitter_puplar-contents:
+                    type: object
+                  yahoo_competitor-contents:
+                    type: object
+                  yahoo_own-contents:
+                    type: object
+                  google_competitor-contents:
+                    type: object
+                  gogle_suggested-words:
+                    type: object
+                  mos_contents:
+                    type: object
+                  mos_similar-contents:
+                    type: object
+                  mos_hot-words:
+                    type: object
+              examples:
+                example-1:
+                  value:
+                    twitter_puplar-contents: {}
+                    yahoo_competitor-contents: {}
+                    yahoo_own-contents: {}
+                    google_competitor-contents: {}
+                    gogle_suggested-words: {}
+                    mos_contents: {}
+                    mos_similar-contents: {}
+                    mos_hot-words: {}
+      operationId: get-search-history
+    parameters:
+      - schema:
+          type: string
+        name: search
+        in: path
+        required: true
+        description: search words
+components:
+  schemas:
+    User:
+      title: User
+      type: object
+      description: ''
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the given user.
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        dateOfBirth:
+          type: string
+          format: date
+          example: '1997-10-31'
+        emailVerified:
+          type: boolean
+          description: Set to true if the user's email has been verified.
+        createDate:
+          type: string
+          format: date
+          description: The date that the user was created.
+      required:
+        - id
+        - firstName
+        - lastName
+        - email
+        - emailVerified
+    GoogleMediaMaster:
+      title: GoogleMediaMaster
+      type: object
+      properties:
+        publisher_id:
+          type: integer
+        name:
+          type: string
+        domain:
+          type: string
+      description: ''
+    MediaMaster:
+      title: MediaMaster
+      type: object
+      properties:
+        media_id:
+          type: integer
+        name:
+          type: string
+    YahooMediaMater:
+      title: YahooMediaMaster
+      type: object
+      properties:
+        publisher_id:
+          type: integer
+        name:
+          type: string
+        url:
+          type: string
+    InstagramerMaster:
+      title: InstagramerMaster
+      type: object
+      properties:
+        instagramer_id:
+          type: integer
+        name:
+          type: string
+    GoogleMediaRelationship:
+      title: GoogleMediaRelationship
+      type: object
+      properties:
+        relationship_id:
+          type: integer
+        media_id:
+          $ref: '#/components/schemas/MediaMaster'
+        publisher_id:
+          $ref: '#/components/schemas/GoogleMediaMaster'
+    YahooMediaRelationship:
+      title: YahooMediaRelationship
+      type: object
+      properties:
+        relationship_id:
+          type: integer
+        media_id:
+          $ref: '#/components/schemas/MediaMaster'
+        publisher_id:
+          $ref: '#/components/schemas/YahooMediaMater'
+    InstagramerRelationship:
+      title: InstagramerRelationship
+      type: object
+      properties:
+        relationship_id:
+          type: integer
+        media_id:
+          $ref: '#/components/schemas/MediaMaster'
+        instagramer_id:
+          $ref: '#/components/schemas/InstagramerMaster'
+    YahooArticle:
+      title: YahooArticle
+      type: object
+      properties:
+        article_id:
+          type: integer
+        publisher_id:
+          $ref: '#/components/schemas/YahooMediaMater'
+        title:
+          type: string
+        content:
+          type: string
+        published_at:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+    InstagramPost:
+      title: InstagramPost
+      type: object
+      properties:
+        post_id:
+          type: integer
+        instagramer_id:
+          $ref: '#/components/schemas/InstagramerMaster'
+        content:
+          type: string
+        posted_at:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+    SearchResult:
+      title: SearchResult
+      type: object
+      properties:
+        search_id:
+          type: integer
+        media_id:
+          $ref: '#/components/schemas/MediaMaster'
+        main_word:
+          type: string
+        sub_word:
+          type: string
+        result:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+    HearstYahooArticle:
+      title: HearstYahooArticle
+      type: object
+      description: ''
+      properties:
+        article_id:
+          type: integer
+        media_id:
+          $ref: '#/components/schemas/MediaMaster'
+        title:
+          type: string
+        content:
+          type: string
+        pv:
+          type: integer
+        ctr:
+          type: number
+          format: float
+        published_at:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+    HearstArticle:
+      title: HearstArticle
+      type: object
+      properties:
+        media_id:
+          $ref: '#/components/schemas/MediaMaster'
+        article_id:
+          type: integer
+          description: media_idとの複合主キー
+        title:
+          type: string
+        content:
+          type: string
+        pv:
+          type: integer
+        ctr:
+          type: number
+          format: float
+        published_at:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+      required:
+        - media_id
